@@ -1,0 +1,52 @@
+{
+  "name": "launcherbackend",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Dagmara Lukanko",
+  "license": "ISC",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "jest --watchAll",
+    "lint": "eslint . --fix",
+    "format": "prettier . --write",
+    "apidoc": "apidoc -i ./ -c apidoc.json -e node_modules -e doc",
+    "start:local": "NODE_ENV=local pm2 start ecosystem.config.js --env local",
+    "start:dev": "NODE_ENV=development pm2 start ecosystem.config.js --env development"
+  },
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "@koa/router": "^12.0.0",
+    "bcrypt": "^5.1.0",
+    "generic-pool": "^3.9.0",
+    "http-status": "^1.6.2",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^9.0.0",
+    "koa": "^2.14.1",
+    "koa-body": "^6.0.1",
+    "koa-compress": "^5.1.0",
+    "koa-mount": "^4.0.0",
+    "koa-passport": "^6.0.0",
+    "koa-session": "^6.4.0",
+    "koa-static": "^5.0.0",
+    "koa-websocket": "^7.0.0",
+    "mysql2": "^3.2.0",
+    "node-schedule": "^2.1.1",
+    "pbkdf2-password": "^1.2.1",
+    "qrcode": "^1.5.1",
+    "typeorm": "^0.3.12",
+    "typeorm-naming-strategies": "^4.1.0",
+    "uuid": "^9.0.0",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "apidoc": "^0.54.0",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.6.1",
+    "prettier": "^2.8.4",
+    "supertest": "^6.3.3",
+    "typeorm-cli": "^1.0.7",
+    "winston": "^3.8.2"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "XRSporter Launcher API",
+  "version": "1.0.0",
+  "description": "XRSporter Launcher API 설명 문서 입니다.",
+  "title": "XRSporter Launcher API",
+  "url": "http://launcher.xrsporter.com",
+  "sampleUrl": "http://launcher.xrsporter.com/",
+
+  "order": ["Auth", "User", "Player", "Character", "PlayerFavorite", "PlayerInventory", "Content", "Schedule", "Item", "License"],
+  "output": "doc",
+  "template": {
+    "withCompare": false,
+    "withGenerator": false,
+    "aloneDisplay": true,
+    "showRequiredLabels": true
+  }
+}
