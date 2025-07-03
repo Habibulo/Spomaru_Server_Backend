@@ -1,3 +1,5 @@
+//서버가 잘 작동하고 있는지 아닌지 파악해서 클라이언트에게 메세지를 띄우는 미들웨어 코드
+
 'use strict';
 
 const Result = require('../utils/result');

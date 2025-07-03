@@ -120,14 +120,11 @@ exports.addNewContent = async (contentData) => {
       is_popular_contents: contentData.is_popular_contents,
       title: contentData.title,
       title_eng: contentData.title_eng,
-      title_jp: contentData.title_jp,
       description: contentData.description,
       description_eng: contentData.description_eng,
-      description_jp: contentData.description_jp,
       exercise_description: contentData.exercise_description,
       short_description: contentData.short_description,
       short_description_eng: contentData.short_description_eng,
-      short_description_jp: contentData.short_description_jp,
       difficulty: contentData.difficulty,
       age: contentData.age,
       playtime: contentData.playtime,
@@ -334,14 +331,11 @@ exports.editContent = async (contentData) => {
   content.is_old_auth = contentData.is_old_auth;
   content.is_popular_contents = contentData.is_popular_contents;
   content.title_eng = contentData.title_eng;
-  content.title_jp = contentData.title_jp;
   content.description = contentData.description;
   content.description_eng = contentData.description_eng;
-  content.description_jp = contentData.description_jp;
   content.exercise_description = contentData.exercise_description;
   content.short_description = contentData.short_description;
   content.short_description_eng = contentData.short_description_eng;
-  content.short_description_jp = contentData.short_description_jp;
   content.difficulty = contentData.difficulty;
   content.age = contentData.age;
   content.playtime = contentData.playtime;

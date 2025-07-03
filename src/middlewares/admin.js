@@ -1,6 +1,9 @@
+//관리자 로그인 관련 미들웨어
+
 'use strict';
 
 const jsonwebtoken = require('jsonwebtoken');
+//**JSON Web Token (JWT)**을 생성하고 검증하는 데 사용되는 Node.js 패키지
 const config = require('../../config');
 const logger = require('../utils/logger');
 const errors = require('../constants/errors');

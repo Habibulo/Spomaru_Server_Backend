@@ -1,3 +1,6 @@
+//redis 관련(데이터베이스 초기화 및 연결)
+//*초기화(어떤번호 쓸지 시작할지 초기과정)
+
 'use strict';
 
 const Redis = require('ioredis');

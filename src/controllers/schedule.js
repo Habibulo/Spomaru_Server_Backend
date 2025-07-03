@@ -6,6 +6,7 @@ const serviceRedis = require('../service/redis');
 const util = require('../utils/common');
 const errors = require('../constants/errors');
 const logger = require('../utils/logger');
+//현재는 사용X
 
 /**
  * @api {get} /api/schedule/info/all 세트 정보

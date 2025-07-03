@@ -1,3 +1,5 @@
+//일반적인 유틸리티 함수들 모음집
+
 'use strict';
 
 const util = {};

@@ -22,7 +22,7 @@ module.exports = new EntitySchema({
     content_id: {
       type: 'varchar',
       length: 45,
-      nullable: false,
+      nullable: true,
       comment: '콘텐츠 ID',
     },
     is_active: {
