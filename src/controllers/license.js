@@ -47,12 +47,13 @@ exports.checkSpomaruPayment = async (ctx) => {
  */
 exports.checkXRPayment = async (ctx) => {
   const mac = ctx.request.body.mac;
+  const encrypted = ctx.request.body.encrypted
 
   if (util.isEmpty(mac)) {
     return Result.error(ctx, errors.ERROR_CODE.PARAMS_EMPTY, '패러미터가 비어 있습니다.');
   }
 
-  const existingPayment = await serviceLicense.checkXRPayment(mac);
+  const existingPayment = await serviceLicense.checkXRPayment(mac, encrypted);
 
   return Result.success(ctx, { end_date: existingPayment });
 };
@@ -179,9 +180,10 @@ exports.getLicenseContent = async (ctx) => {
 
 exports.initUserContent = async (ctx) => {
   const mac = ctx.request.body.mac;
+  const encrypted = ctx.request.body.encrypted
 
   try {
-    const userContent = await serviceLicense.initUserContent(mac);
+    const userContent = await serviceLicense.initUserContent(mac, encrypted);
     return Result.success(ctx, userContent, '데이터가 성공적으로 추가되었습니다.');
   } catch (err) {
     return Result.error(ctx, err.code, err.message);
@@ -198,8 +200,9 @@ exports.initUserContent = async (ctx) => {
  */
 exports.initLicenseContent = async (ctx) => {
   const mac = ctx.request.body.mac;
+  const encrypted = ctx.request.body.encrypted
 
-  const licenseContent = await serviceLicense.initLicenseContent(mac);
+  const licenseContent = await serviceLicense.initLicenseContent(mac, encrypted);
 
   return Result.success(ctx, licenseContent);
 };

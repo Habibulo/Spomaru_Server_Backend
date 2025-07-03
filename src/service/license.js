@@ -68,33 +68,52 @@ exports.checkSpomaruPayment = async (mac) => {
  * @param {*} mac
  * @returns
  */
-exports.checkXRPayment = async (mac) => {
+exports.checkXRPayment = async (mac, encrypted) => {
   try {
     const ds = dataSource('log');
     const repo = ds.getRepository(xrsporterPaymentSchema);
-
-    const existingPayment = await repo.findOneBy({ mac_address: mac });
     const currentTime = new Date();
-    if (existingPayment) {
-      existingPayment.end_date = formatDate(existingPayment.end_date);
-      existingPayment.current_date = formatDate(currentTime);
-      return existingPayment;
-    } else {
-      const newPayment = {
-        mac_address: mac,
-      };
 
-      await repo.save(newPayment);
-      const finalResult = await repo.findOneBy({ mac_address: mac });
-      finalResult.end_date = formatDate(finalResult.end_date);
-      finalResult.current_date = formatDate(currentTime);
-      return finalResult;
+    // Try to find existing by mac or encrypted
+    const byMac = await repo.findOneBy({ mac_address: mac });
+    const byEncrypted = await repo.findOneBy({ mac_address: encrypted });
+
+    // Case 1: Found using old MAC
+    if (byMac) {
+      if (byMac.mac_address !== encrypted) {
+        byMac.mac_address = encrypted;
+        await repo.save(byMac);
+      }
+      byMac.end_date = formatDate(byMac.end_date);
+      byMac.current_date = formatDate(currentTime);
+      return byMac;
     }
+
+    // Case 2: Already stored using encrypted MAC
+    if (byEncrypted) {
+      byEncrypted.end_date = formatDate(byEncrypted.end_date);
+      byEncrypted.current_date = formatDate(currentTime);
+      return byEncrypted;
+    }
+
+    // Case 3: Not found - create new with encrypted MAC
+    const newPayment = {
+      mac_address: encrypted,
+    };
+
+    await repo.save(newPayment);
+    const finalResult = await repo.findOneBy({ mac_address: encrypted });
+    finalResult.end_date = formatDate(finalResult.end_date);
+    finalResult.current_date = formatDate(currentTime);
+    console.log('New XR Payment Created:', finalResult);
+    return finalResult;
+
   } catch (error) {
     console.error('Error in checkXRPayment:', error);
     throw error;
   }
 };
+
 /**
  *
  * @returns
@@ -204,6 +223,7 @@ exports.getLicenseContent = async (mac) => {
 
 exports.initUserContent = async (mac) => {
   const dsContent = dataSource('data');
+  const dsLicenseContent = dataSource('log');
   const dsLog = dataSource('log');
 
   const repoContent = dsContent.getRepository(contentInfoSchema);
@@ -227,7 +247,7 @@ exports.initUserContent = async (mac) => {
   await repoLog.save(newRows);
 };
 
-exports.initLicenseContent = async (mac) => {
+exports.initLicenseContent = async (mac, encrypted) => {
   const dsContent = dataSource('data');
   const dsLog = dataSource('log');
 
@@ -235,39 +255,49 @@ exports.initLicenseContent = async (mac) => {
   const repoUserContent = dsLog.getRepository(userContentSchema);
   const repoLicenseContent = dsLog.getRepository(licenseContentSchema);
 
-  // Fetch all contents
   const contents = await repoContent.find();
 
-  const category = Object.keys(enums.CATEGORY_TYPE).join('#').toLowerCase();
-  const sensor = Object.keys(enums.SENSOR_TYPE).join('#').toLowerCase();
-  const screen = Object.keys(enums.SCREEN_TYPE).join('#').toLowerCase();
-  const existingLicense = await repoLicenseContent.findOneBy({ mac_address: mac });
-  if (existingLicense) {
-    return;
-  } else {
-    const contentLicense = {
-      mac_address: mac,
-      category,
-      sensor,
-      screen,
-    };
+  const macSafe = mac || `unknown-mac-${Date.now()}`;
+  const fingerprintSafe = encrypted || `unknown-fp-${Date.now()}`;
 
-    const newRows = await Promise.all(
-      contents.map(async (content) => {
-        const newRow = repoUserContent.create({
-          mac_address: mac,
-          content_id: content.content_id,
-          is_active: 1,
-        });
-        return newRow;
-      }),
-    );
-    await repoUserContent.save(newRows);
-    await repoLicenseContent.save(contentLicense);
+  const licenseByMac = await repoLicenseContent.findOneBy({ mac_address: macSafe });
+  const licenseByEncrypted = await repoLicenseContent.findOneBy({ mac_address: fingerprintSafe });
 
-    return contentLicense;
+  // Case 1: mac exists → update mac to encrypted if different
+  if (licenseByMac) {
+    if (licenseByMac.mac_address !== fingerprintSafe) {
+      licenseByMac.mac_address = fingerprintSafe;
+      await repoLicenseContent.save(licenseByMac);
+    }
+    return licenseByMac;
   }
+
+  // Case 2: encrypted already exists
+  if (licenseByEncrypted) {
+    return licenseByEncrypted;
+  }
+
+  // Case 3: Not found → create new
+  const contentLicense = {
+    mac_address: fingerprintSafe,
+    category: Object.keys(enums.CATEGORY_TYPE).join('#').toLowerCase(),
+    sensor: Object.keys(enums.SENSOR_TYPE).join('#').toLowerCase(),
+    screen: Object.keys(enums.SCREEN_TYPE).join('#').toLowerCase(),
+  };
+  await repoLicenseContent.save(contentLicense);
+
+  const newRows = contents.map((content) =>
+    repoUserContent.create({
+      mac_address: fingerprintSafe,
+      content_id: content.content_id,
+      is_active: 1,
+    })
+  );
+  await repoUserContent.save(newRows);
+
+  return contentLicense;
 };
+
 
 exports.getActiveUserContent = async (mac) => {
   const dsLog = dataSource('log');

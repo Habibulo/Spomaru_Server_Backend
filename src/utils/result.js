@@ -1,3 +1,6 @@
+//컨트롤러에서 성공한건지 실패한건지 그걸 json으로 만든 모듈들(성공, 실패, 에러)
+//coa.js를 이용하여 ctx
+
 /**
  * Module for handling JSON responses in a web server.
  * - 'json': Formats a JSON response with provided data, status code, and optional message.

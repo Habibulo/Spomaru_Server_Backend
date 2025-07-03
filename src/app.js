@@ -1,3 +1,5 @@
+//전체적인 모음집
+
 const Koa = require('koa');
 const { koaBody } = require('koa-body');
 const cors = require('@koa/cors');
@@ -34,9 +36,14 @@ const checkServerStatus = require('./middlewares/server-state');
 app.use(checkServerStatus);
 
 const serverOrigin = config.app.host;
-const allowedOrigins = ['http://localhost:3000', serverOrigin];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://launcher.xrsporter.com',
+  'http://launcher.xrsporter.com:3000/api',
+  serverOrigin,
+];
 // Configure CORS options
-
+// CORS = 
 const corsOptions = {
   origin: (ctx) => {
     const origin = ctx.request.header.origin;
@@ -51,7 +58,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(compress());
-app.use(koaBody({ jsonLimit: '100mb', parse: true }));
+app.use(koaBody({ jsonLimit: '100mb' }));
+app.use(router.routes());
 app.keys = [process.env.TOKEN_KEY];
 session(
   {
@@ -66,10 +74,8 @@ session(
   app,
 );
 
-app.use(router.routes());
-
 app.listen(config.app.port, () => {
-  logger.info('Server listening on port', config.app.port);
+  logger.info(`Server listening on port, http://localhost:${config.app.port},  config.app.port`);
 });
 
 /**

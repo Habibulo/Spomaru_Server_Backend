@@ -1,3 +1,5 @@
+//에러 관련된 동작사항은 컨트롤러 쪽 참고 이건 그냥 Object임
+
 'use strict';
 
 module.exports = Object.freeze({

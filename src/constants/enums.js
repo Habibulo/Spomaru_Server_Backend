@@ -400,7 +400,7 @@ module.exports = Object.freeze({
 
   LAUNCHER_TYPE: {
     SPOMARU: 'spomaru',
-    XRSPORER: 'xrsporter',
+    XRSPORTER: 'xrsporter',
     WIZDOMBOX: 'wizdombox',
     SINIOR: 'sinior',
   },

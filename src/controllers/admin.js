@@ -1,15 +1,27 @@
+//컨트롤러는 받은 결과를 클라이언트에게 반환합니다.
+//ex ] 클라이언트 메세지를 넘겨주는 역할. 특수한 상황에 따라 문법을 써주면서 true / false 파악가능
+
 'use strict';
 
 const errors = require('../constants/errors');
+//에러 관련 모듈 import(constants/errors 참고)
 const util = require('../utils/common');
+//util 관련 모듈 import(utils/common 참고)
 const Result = require('../utils/result');
+//result 관련 모듈 import(utils/result 참고)
 const serviceAdmin = require('../service/admin');
 const serviceRedis = require('../service/redis');
+//service 관련 모듈 import(service/.. 참고)
 const adminMiddleware = require('../middlewares/admin');
+//adminMiddleware 관련 모듈 import(middlewares/admin 참고)
 const logger = require('../utils/logger');
+//utils 관련 모듈 import(utils/logger 참고)
 const fs = require('fs');
+//node 모듈 자체의 filesystem 모듈
 const path = require('path');
 const { stat } = require('fs/promises');
+
+/* controllers에 있는 모든 import는 admins에서만 다루고 생략함 */
 
 /**
  * @api {post} /api/admin/login Admin Login [관리자 로그인]
@@ -31,19 +43,30 @@ const { stat } = require('fs/promises');
 
 exports.loginAdmin = async (ctx) => {
   const { id, password } = ctx.request.body;
-
+  /*   
+  비동기 함수 선언: async 키워드를 사용하여 비동기 함수를 정의합니다. 이는 이 함수 내에서 await를 사용할 수 있도록 합니다.
+  ctx 객체: 이 매개변수는 Koa.js의 컨텍스트 객체로, 요청 및 응답에 대한 정보를 담고 있습니다. ctx.request.body를 통해 클라이언트가 보낸 요청 본문을 가져옵니다.
+  */
   if (util.isEmpty(id) || util.isEmpty(password)) {
     return Result.error(ctx, errors.ERROR_CODE.PARAMS_EMPTY, '패러미터가 비어 있습니다.');
   }
-
+  /* 
+  입력 검증: ID나 비밀번호가 비어 있는지 확인합니다. 만약 비어 있다면, 에러 코드를 포함한 실패 응답을 반환합니다.
+  Result.error는 에러 응답을 생성하는 유틸리티 함수입니다. 
+  */
   const admin = await serviceAdmin.authAdmin({ id, password });
+  /* 
+  관리자 인증: serviceAdmin.authAdmin 함수를 호출하여 비동기적으로 관리자를 인증합니다. 이 함수는 ID와 비밀번호를 객체 형태로 받아 해당 관리자가 존재하는지 확인합니다.
+  await 사용: await 키워드는 Promise가 해결될 때까지 기다리며, 이 경우 인증 결과인 admin 객체를 반환합니다.
+  */
   if (!admin) {
     logger.error(errors.ERROR_CODE.ADMIN_AUTH_FAILED + '관리자 인증 실패하였습니다.');
     return Result.error(ctx, errors.ERROR_CODE.ADMIN_AUTH_FAILED, '관리자 인증 실패하였습니다.');
   }
-
   return Result.success(ctx, { accessToken: adminMiddleware.getAccessToken(admin), refreshToken: adminMiddleware.getRefreshToken(admin) });
+  
 };
+
 
 /**
  * @api {post} /api/admin/logs Log Records [로그 기록]

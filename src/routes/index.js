@@ -137,4 +137,9 @@ router.post('/api/license/changeContentActive', licenseController.changeContentS
 router.post('/api/license/launcherType', licenseController.checkLauncherType);
 router.delete('/api/license/delete/:id', licenseController.deleteLicense);
 
+
+//test
+router.get('/test', async (ctx) => {
+  ctx.body = { message: 'Test route is working!' };
+});
 module.exports = router;
