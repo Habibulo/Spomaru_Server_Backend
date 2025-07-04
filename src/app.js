@@ -36,12 +36,7 @@ const checkServerStatus = require('./middlewares/server-state');
 app.use(checkServerStatus);
 
 const serverOrigin = config.app.host;
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://launcher.xrsporter.com',
-  'http://launcher.xrsporter.com:3000/api',
-  serverOrigin,
-];
+const allowedOrigins = ['http://localhost:3000', serverOrigin];
 // Configure CORS options
 // CORS = 
 const corsOptions = {
@@ -58,7 +53,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(compress());
-app.use(koaBody({ jsonLimit: '100mb' }));
+app.use(koaBody({ jsonLimit: '100mb', parse: true }));
 app.use(router.routes());
 app.keys = [process.env.TOKEN_KEY];
 session(

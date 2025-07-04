@@ -16,7 +16,7 @@ module.exports = new EntitySchema({
     },
     mac_address: {
       type: 'varchar',
-      length: 17,
+      length: 255,
       comment: '계정 고유 번호',
     },
     content_id: {

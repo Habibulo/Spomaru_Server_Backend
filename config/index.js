@@ -122,7 +122,7 @@ const config = {
         port: '3306',
         type: 'mysql',
         database: 'crlauncher_data',
-        synchronize: true, // Set to false in production
+        synchronize: false, // Set to false in production
       },
       log: {
         host: 'launcher.xrsporter.com',
@@ -131,7 +131,7 @@ const config = {
         port: '3306',
         type: 'mysql',
         database: 'crlauncher_log',
-        synchronize: true,
+        synchronize: false,
       },
       user: {
         host: 'launcher.xrsporter.com',
@@ -140,7 +140,7 @@ const config = {
         port: '3306',
         type: 'mysql',
         database: 'crlauncher_user',
-        synchronize: true,
+        synchronize: false,
       },
     },
     redis: {
