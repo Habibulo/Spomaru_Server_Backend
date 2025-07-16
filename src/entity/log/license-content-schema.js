@@ -15,7 +15,7 @@ module.exports = new EntitySchema({
     },
     mac_address: {
       type: 'varchar',
-      length: 255,
+      length: 17,
       comment: 'MAC Address of the payer',
     },
     category: {
