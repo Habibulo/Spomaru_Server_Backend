@@ -368,31 +368,45 @@ exports.changeLauncherType = async (mac, type) => {
 
   return existingLicense;
 };
-
 exports.changeContentActiveStatus = async (mac, contentIds) => {
+  //logger.info(`The change Active Status has been hit for MAC: ${mac}`);
   const ds = dataSource('log');
   const repo = ds.getRepository(userContentSchema);
+
   const existingContents = await repo.find({ where: { mac_address: mac } });
+  logger.info(`Found ${existingContents.length} existing contents for MAC: ${mac}`);
 
   for (const contentIdKey in contentIds) {
     const isActive = contentIds[contentIdKey] ? 1 : 0;
 
-    const existingContent = existingContents.find((content) => content.content_id === contentIdKey);
+    const existingContent = existingContents.find(
+      (content) => content.content_id === contentIdKey
+    );
 
     if (existingContent) {
       if (existingContent.is_active !== isActive) {
-        await repo.update(existingContent, { is_active: isActive });
+        // ✅ FIXED: Use proper update criteria
+        const result = await repo.update(
+          { mac_address: mac, content_id: contentIdKey },
+          { is_active: isActive }
+        );
+        logger.info(`Updated content_id=${contentIdKey}, is_active=${isActive}, result:`, result);
       }
     } else {
-      const newContent = await repo.create({
+      const newContent = repo.create({
         mac_address: mac,
         content_id: contentIdKey,
         is_active: isActive,
       });
       await repo.save(newContent);
+      //logger.info(`✅ Inserted content_id=${contentIdKey}, is_active=${isActive}`);
+      logger.info(`Inserted New Contents are: ${newContent}`)
     }
   }
+
+  logger.info(`=== DONE saving content states ===`);
 };
+
 
 exports.checkLauncherType = async (mac) => {
   const ds = dataSource('log');
