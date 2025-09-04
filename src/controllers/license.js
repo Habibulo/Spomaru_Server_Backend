@@ -348,3 +348,19 @@ exports.deleteLicense = async (ctx) => {
     return Result.error(ctx, err.code, err.message);
   }
 };
+
+
+/**
+ * @api {post} /api/license/syncLicenseContent 모든 라이센스 콘텐츠 동기화
+ * @apiName SyncLicenseContent
+ * @apiGroup License
+ * @apiDescription 모든 MAC 주소의 라이센스 콘텐츠와 유저 콘텐츠를 enum 기반으로 최신화합니다.
+ */
+exports.syncLicenseContent = async (ctx) => {
+  try {
+    const result = await serviceLicense.syncAllLicenseContent();
+    return Result.success(ctx, result, '라이센스 콘텐츠가 성공적으로 동기화되었습니다.');
+  } catch (err) {
+    return Result.error(ctx, err.code || 500, err.message || '동기화 중 오류 발생');
+  }
+};
