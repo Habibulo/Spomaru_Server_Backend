@@ -80,6 +80,8 @@ module.exports = Object.freeze({
     RECOGNIZE: 'recognize',
     //신체활동
     PHYSICAL: 'physical',
+    //터치팡
+    TOUCHPANG: 'touchpang',
   },
 
   SUBCATEGORY_TYPE: {
@@ -261,7 +263,9 @@ module.exports = Object.freeze({
     //동작인식 센서
     MOTION: 'motion',
     //9축 센서
-    AXIS: 'axis',
+    AXIS: 'axis', 
+    //센서 없음
+    SENSORLESS: 'sensorless',
   },
 
   SCREEN_TYPE: {
@@ -400,7 +404,7 @@ module.exports = Object.freeze({
 
   LAUNCHER_TYPE: {
     SPOMARU: 'spomaru',
-    XRSPORTER: 'xrsporter',
+    XRSPORER: 'xrsporter',
     WIZDOMBOX: 'wizdombox',
     SINIOR: 'sinior',
   },

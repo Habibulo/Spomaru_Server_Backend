@@ -14,6 +14,8 @@ const imagesController = require('../controllers/image');
 const scheduleController = require('../controllers/schedule');
 const adminController = require('../controllers/admin');
 const licenseController = require('../controllers/license');
+const notificationController = require('../controllers/notification');
+//const notificationController = require('../controllers/notification');
 const router = new Router();
 
 //admin
@@ -136,7 +138,18 @@ router.post('/api/license/getActiveUserContent', licenseController.getActiveUser
 router.post('/api/license/changeContentActive', licenseController.changeContentStatus);
 router.post('/api/license/launcherType', licenseController.checkLauncherType);
 router.delete('/api/license/delete/:id', licenseController.deleteLicense);
+router.post('/api/license/syncLicenseContent', licenseController.syncLicenseContent);
 
+// Notification (generic)
+router.get('/api/notification/latest', notificationController.getLatest);
+router.get('/api/notification/getAll', notificationController.list);
+router.get('/api/notification/get/:id', notificationController.getById);
+router.post('/api/notification/create', notificationController.create);
+router.put('/api/notification/edit/:id', notificationController.update);
+router.delete('/api/notification/delete/:id', notificationController.remove);
+
+// Per-user dismiss
+router.post('/api/notification/:id/dismiss', notificationController.dismiss);
 
 //test
 router.get('/test', async (ctx) => {

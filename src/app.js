@@ -38,8 +38,9 @@ app.use(checkServerStatus);
 const serverOrigin = config.app.host;
 const allowedOrigins = [
   'http://localhost:3000',
-  'http://launcher.xrsporter.com',
-  'http://launcher.xrsporter.com/:3000',
+  'http://localhost:3001',
+  'http://launcher-test.xrsporter.com',
+  'http://launcher-test.xrsporter.com/:3000',
   serverOrigin,
 ];
 // Configure CORS options
