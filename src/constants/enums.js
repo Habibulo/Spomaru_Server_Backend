@@ -82,6 +82,8 @@ module.exports = Object.freeze({
     PHYSICAL: 'physical',
     //터치팡
     TOUCHPANG: 'touchpang',
+    // 클라이밍
+    CLIMBING: 'climbing',
   },
 
   SUBCATEGORY_TYPE: {
@@ -189,6 +191,10 @@ module.exports = Object.freeze({
     LANGUAGEPOWER: 'languagepower',
     //모양 비교
     SHAPECOMPARISON: 'shapecomparison',
+    //기초 훈련
+    BASICRTRAINING: 'basictraining',
+    //융복합 훈련
+    COMPLEXTRAINING: 'complextraining',
   },
 
   SET_TYPE: {
